@@ -3,7 +3,7 @@ from .models import User
 from django.views.decorators.csrf import csrf_exempt
 import json
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from bson import ObjectId
 
 @csrf_exempt
 def register(request):
@@ -65,3 +65,47 @@ def login(request):
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=400)
     return JsonResponse({"error": "Yalnızca POST istekleri kabul edilir!"}, status=405)
+
+
+@csrf_exempt  # CSRF doğrulamasını devre dışı bırakır
+def add_remove_favorite(request):
+    try:
+        data = json.loads(request.body)
+        user_id = data['user_id']
+        product_id = data['product_id']
+        action = data['action']
+
+        # Verileri kontrol etmek için eklenen print komutları
+        print("user_id:", user_id)
+        print("product_id:", product_id)
+
+        # Kullanıcıyı ve ürünü alırken ObjectId formatını kontrol edin
+        if not ObjectId.is_valid(user_id):
+            return JsonResponse({"error": "Geçersiz kullanıcı ID'si"}, status=400)
+
+        if not ObjectId.is_valid(product_id):
+            return JsonResponse({"error": "Geçersiz ürün ID'si"}, status=400)
+        
+        user = User.objects(id=user_id).first()
+
+        if not user:
+            return JsonResponse({"error": "Kullanıcı bulunamadı"}, status=404)
+        
+        if action == 'add':
+            if product_id not in user.favorites:
+                user.update(push__favorites=product_id)
+                return JsonResponse({"message": "Ürün favorilere eklendi"}, status=200)
+            else:
+                return JsonResponse({"message": "Ürün zaten favorilerde"}, status=400)
+        
+        elif action == 'remove':
+            if product_id in [str(fav) for fav in user.favorites]:  # MongoDB ObjectId'lerini string ile karşılaştır
+                user.update(pull__favorites=product_id)
+                return JsonResponse({"message": "Ürün favorilerden çıkarıldı"}, status=200)
+            else:
+                return JsonResponse({"message": "Ürün favorilerde değil"}, status=400)
+        else:
+            return JsonResponse({"error": "Geçersiz işlem türü"}, status=400)
+
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)

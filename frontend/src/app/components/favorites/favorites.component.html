@@ -1,0 +1,13 @@
+<div class="favorites">
+    <h2>Favorileriniz</h2>
+    <div *ngIf="favorites.length > 0; else noFavorites">
+      <div *ngFor="let favorite of favorites">
+        <p>{{ favorite.name }} - {{ favorite.price }} TL</p>
+        <button (click)="removeFavorite(favorite.id)">Favorilerden Çıkar</button>
+      </div>
+    </div>
+    <ng-template #noFavorites>
+      <p>Henüz favori ürününüz yok.</p>
+    </ng-template>
+  </div>
+  

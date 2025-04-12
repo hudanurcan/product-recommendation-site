@@ -41,9 +41,27 @@ export class ProductDetailComponent implements OnInit {
   getProductDetail(productId: string): Observable<any> {
     return this.http.get<any>(`http://localhost:8000/api/product/${productId}/`);
   }
+
   isFavorite = false;
-  toggleFavorite() {
-    this.isFavorite = !this.isFavorite;
-  }
+
+toggleFavorite() {
+  this.isFavorite = !this.isFavorite;
+  const action = this.isFavorite ? 'add' : 'remove';
+
+  // Backend'e favori ekleme ya da çıkarma isteği gönderiyoruz
+  this.http.post('http://localhost:8000/api/users/favorites/', {
+    user_id: 'kullanıcı-id',  // Bu değeri oturumda oturum açan kullanıcıdan alacaksınız
+    product_id: this.productId,
+    action: action
+  }).subscribe(
+    response => {
+      console.log('Favori durumu başarıyla güncellendi', response);
+    },
+    error => {
+      console.error('Favori durumu güncellenemedi', error);
+    }
+  );
+}
+
   
 }
