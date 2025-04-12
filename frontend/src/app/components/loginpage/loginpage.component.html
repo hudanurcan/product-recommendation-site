@@ -1,0 +1,68 @@
+<div class="container">
+  <!-- Sol Taraf -->
+  <div class="left-side">
+    <p>
+      wARdrobe, kullanıcılarına kıyafetlerini deneme imkanı sunarak alışveriş
+      deneyimini geliştirmeyi hedefler. Yüksek kaliteli kıyafetlerimizle
+      tarzınızı keşfedin. Dijital dolabınızda, seçtiğiniz kıyafetleri
+      deneyebilir, farklı kombinler yaratabilir ve tarzınızı bir adım öteye
+      taşıyabilirsiniz. wARdrobe, sadece alışveriş değil, aynı zamanda bir moda
+      yolculuğudur. Haydi, gardırobunuzu yeniden keşfedin ve WArdrobe’un
+      ayrıcalıklı dünyasına adım atın. Kendinizi ifade etmek için artık sınırsız
+      olanaklara sahipsiniz!
+    </p>
+  </div>
+
+  <!-- Sağ Taraf -->
+  <div class="right-side">
+    <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+
+      <div class="form-container">
+        
+        <div class="logo-container">
+          <img src="2.png" alt="Logo" />
+        </div>
+
+        <h3>Giriş Yap</h3>
+        <!-- E-Posta -->
+        <input
+          type="email"
+          class="input"
+          placeholder="E-Posta"
+          [(ngModel)]="credentials.email"
+          name="email"
+          required
+        />
+        <!-- Şifre -->
+        <input
+          type="password"
+          class="input"
+          placeholder="Parola"
+          [(ngModel)]="credentials.password"
+          name="password"
+          required
+        />
+   
+      </div>
+
+      <div class="bottom-side">
+             <!-- Hatırla ve Şifre -->
+             <div class="remember">
+              <label>
+                <input type="checkbox" /> Beni Hatırla
+              </label>
+              <a href="#">Şifremi Unuttum</a>
+            </div>
+            <!-- Giriş Yap -->
+            <button
+              type="submit"
+              class="button"
+              [disabled]="!loginForm.valid"
+            >
+              Giriş Yap
+            </button>
+            <p>Hesabınız yok mu? <a routerLink="/signup">Kayıt olun</a></p>
+      </div>
+    </form>
+  </div>
+</div>

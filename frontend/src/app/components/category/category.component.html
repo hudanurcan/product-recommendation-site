@@ -1,0 +1,11 @@
+<h1>{{ category | titlecase }} Ürünleri</h1>
+<div *ngIf="products.length > 0; else noProducts">
+  <div *ngFor="let product of products">
+    <img [src]="product.images[0]" alt="{{ product.name }}">
+    <h3>{{ product.name }}</h3>
+    <p>{{ product.price }} TL</p>
+  </div>
+</div>
+<ng-template #noProducts>
+  <p>Bu kategoride ürün bulunmamaktadır.</p>
+</ng-template>

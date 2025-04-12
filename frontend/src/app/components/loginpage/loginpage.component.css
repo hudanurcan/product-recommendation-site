@@ -1,0 +1,136 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  width: 90%;
+  height: 88vh;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-left: 5%;
+  margin-top: 5%;
+}
+
+.left-side,
+.right-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.left-side {
+  flex: 65%;
+  background-color: #e1dbcf;
+  padding: 0;
+}
+
+.left-side p {
+  margin: 3%;
+  font-size: 25px;
+  color: #685752;
+}
+
+.right-side {
+  flex: 35%;
+  background-image: url('/wallpaper.jpg');
+  background-size: cover;
+  background-position: center;
+  padding: 0;
+  margin: 0;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.logo-container img {
+  object-fit: contain;
+  height: 70%;
+  width: 70%;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 300px;
+  padding: 20px;
+}
+
+.form-container h3 {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #452c2e;
+  text-align: center;
+}
+
+.form-container input {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 100%;
+  margin-bottom: 7%;
+}
+
+
+
+.form-container button:hover {
+  cursor: pointer;
+  background-color: #615446;
+
+}
+
+.remember{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  color: #5b392f;
+  margin-left: 6%;
+}
+
+.remember a {
+  color: #4e4e4e;
+  text-decoration: none;
+}
+
+.remember a:hover {
+  text-decoration: underline;
+}
+
+.bottom-side button {
+  background-color: #B6A28E;
+  color: #fff;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 95%;
+  margin: 5% 0 0 6%;
+  
+}
+
+.bottom-side p {
+  font-size: 18px;
+  margin-left: 6%;;
+}
+
+.bottom-side button:hover {
+  background-color: #5c4d3e;
+  cursor: pointer;
+
+}

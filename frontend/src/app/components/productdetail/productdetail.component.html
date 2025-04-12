@@ -1,0 +1,67 @@
+
+<!-- <div *ngIf="product">
+  <h2>{{ product.name }}</h2>
+  <p><strong>Fiyat:</strong> {{ product.price }}</p>
+  <img [src]="product.images" alt="{{ product.name }}" />
+  <p>{{ product.description }}</p> 
+</div>
+
+<div *ngIf="!product">
+  <p>Ürün bulunamadı.</p>
+</div> -->
+
+
+<!-- <div class="product-container" *ngIf="product">
+    <div class="product-image">
+      <img [src]="product.images" alt="{{ product.name }}" />
+    </div>
+    <div class="product-details">
+      <h2>{{ product.name }}</h2>
+      <p><strong>Fiyat:</strong> {{ product.price }}</p>
+      <div class="qr-and-actions">
+        <div class="qr-code"> -->
+          <!-- Karekod geleceği yer -->
+          <!-- <p>Karekod</p>
+        </div>
+        <div class="actions">
+          <button class="buy-button">Satın Al</button>
+          <button class="favorite-button">❤️</button>
+        </div>
+      </div>
+      <p>{{ product.description }}</p>
+    </div>
+  </div>
+  
+  <div *ngIf="!product">
+    <p>Ürün bulunamadı.</p>
+  </div> -->
+  
+
+  <div class="container" *ngIf="product">
+    <div class="product-image">
+      <img [src]="product.images" alt="{{ product.name }}" />
+    </div>
+    <div class="product-details">
+      <h2>{{ product.name }}</h2>
+      <p><strong>Fiyat:</strong> {{ product.price }}</p>
+      <div class="qr-code">
+        <p>Karekod</p>
+      </div>
+      <div class="actions">
+        <button class="buy-button">Satın Al</button>
+        <button 
+          class="favorite-button" 
+          [class.active]="isFavorite" 
+          (click)="toggleFavorite()"
+        >
+        ❤
+        </button>
+      </div>
+      <p>{{ product.description }}</p>
+    </div>
+  </div>
+  
+  <div *ngIf="!product">
+    <p>Ürün bulunamadı.</p>
+  </div>
+  
