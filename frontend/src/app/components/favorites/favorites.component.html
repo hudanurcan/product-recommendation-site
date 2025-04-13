@@ -2,9 +2,9 @@
     <h2>Favori Ürünler</h2>
   
     <!-- Favoriler listesi -->
-    <div *ngIf="favorites.length > 0; else noFavorites">
+    <div *ngIf="favorites.length > 0; else noFavorites" class="favorites-grid">
       <div *ngFor="let favorite of favorites" class="favorite-item">
-        <a [routerLink]="['/product', favorite.product_id]"> <!-- Burada RouterLink kullanıyoruz -->
+        <a [routerLink]="['/product', favorite.product_id]">
           <img [src]="favorite.product_image" alt="{{favorite.product_name}}" />
           <p><strong>Ürün Adı:</strong> {{ favorite.product_name }}</p>
           <p><strong>Fiyat:</strong> {{ favorite.product_price }}</p>

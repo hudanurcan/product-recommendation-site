@@ -44,24 +44,32 @@ export class ProductDetailComponent implements OnInit {
 
   isFavorite = false;
 
-toggleFavorite() {
-  this.isFavorite = !this.isFavorite;
-  const action = this.isFavorite ? 'add' : 'remove';
-
-  // Backend'e favori ekleme ya da çıkarma isteği gönderiyoruz
-  this.http.post('http://localhost:8000/api/users/favorites/', {
-    user_id: 'kullanıcı-id',  // Bu değeri oturumda oturum açan kullanıcıdan alacaksınız
-    product_id: this.productId,
-    action: action
-  }).subscribe(
-    response => {
-      console.log('Favori durumu başarıyla güncellendi', response);
-    },
-    error => {
-      console.error('Favori durumu güncellenemedi', error);
+  toggleFavorite() {
+    this.isFavorite = !this.isFavorite;
+    const action = this.isFavorite ? 'add' : 'remove';
+  
+    const currentUser = localStorage.getItem('currentUser');
+    const user = currentUser ? JSON.parse(currentUser) : null;
+    const userId = user?.user_id;
+  
+    if (!userId) {
+      console.error("Kullanıcı ID bulunamadı.");
+      return;
     }
-  );
-}
-
+  
+    this.http.post('http://localhost:8000/api/users/favorites/', {
+      user_id: userId,
+      product_id: this.productId,
+      action: action
+    }).subscribe(
+      response => {
+        console.log('Favori durumu başarıyla güncellendi', response);
+      },
+      error => {
+        console.error('Favori durumu güncellenemedi', error);
+      }
+    );
+  }
+  
   
 }

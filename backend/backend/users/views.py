@@ -145,3 +145,25 @@ def get_favorites(request, user_id):
 
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+    
+
+@csrf_exempt
+def update_favorites(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            user_id = data.get('user_id')
+            product_id = data.get('product_id')
+            action = data.get('action')
+
+            user = User.objects.get(id=user_id)
+            if action == "add":
+                if product_id not in user.favorites:
+                    user.favorites.append(product_id)
+            elif action == "remove":
+                if product_id in user.favorites:
+                    user.favorites.remove(product_id)
+            user.save()
+            return JsonResponse({"message": "Favori güncellendi."}, status=200)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
