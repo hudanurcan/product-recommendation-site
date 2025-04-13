@@ -17,18 +17,24 @@ import { Observable } from 'rxjs';
 export class ProductDetailComponent implements OnInit {
   productId: string | null = null;
   product: any;  // Ürün detaylarını tutacak değişken
+  userId: string | null = null;
 
   constructor(private route: ActivatedRoute, private http: HttpClient) {}
 
   ngOnInit(): void {
     // URL'den ürün id'sini alıyoruz
     this.productId = this.route.snapshot.paramMap.get('id');
-    
+    const currentUser = localStorage.getItem('currentUser');
+    const user = currentUser ? JSON.parse(currentUser) : null;
+
+    this.userId = user?.user_id || null;
+
     if (this.productId) {
       // Ürün detaylarını almak için HTTP isteği gönderiyoruz
       this.getProductDetail(this.productId).subscribe(
         (data) => {
           this.product = data;
+          this.checkIfFavorite(); // favori mi kontrol et
         },
         (error) => {
           console.error("Ürün detayları alınamadı:", error);
@@ -45,31 +51,39 @@ export class ProductDetailComponent implements OnInit {
   isFavorite = false;
 
   toggleFavorite() {
-    this.isFavorite = !this.isFavorite;
-    const action = this.isFavorite ? 'add' : 'remove';
+    if (!this.userId || !this.productId) return;
   
-    const currentUser = localStorage.getItem('currentUser');
-    const user = currentUser ? JSON.parse(currentUser) : null;
-    const userId = user?.user_id;
-  
-    if (!userId) {
-      console.error("Kullanıcı ID bulunamadı.");
-      return;
-    }
+    const action = this.isFavorite ? 'remove' : 'add';
   
     this.http.post('http://localhost:8000/api/users/favorites/', {
-      user_id: userId,
+      user_id: this.userId,
       product_id: this.productId,
       action: action
     }).subscribe(
       response => {
-        console.log('Favori durumu başarıyla güncellendi', response);
+        this.isFavorite = !this.isFavorite;
+        console.log('Favori durumu güncellendi:', response);
       },
       error => {
-        console.error('Favori durumu güncellenemedi', error);
+        console.error('Favori durumu güncellenemedi:', error);
       }
     );
   }
   
+  
+checkIfFavorite() {
+  if (!this.userId) return;
+
+  this.http.get<any>(`http://localhost:8000/api/users/favorites/${this.userId}`).subscribe(
+    response => {
+      const favorites = response.favorites;
+      this.isFavorite = favorites.some((fav: any) => fav.product_id === this.productId);
+    },
+    error => {
+      console.error('Favoriler alınamadı:', error);
+    }
+  );
+}
+
   
 }

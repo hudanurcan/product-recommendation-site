@@ -148,8 +148,8 @@ def get_favorites(request, user_id):
     
 
 @csrf_exempt
-def update_favorites(request):
-    if request.method == "POST":
+def favorites(request):
+    if request.method == 'POST':
         try:
             data = json.loads(request.body)
             user_id = data.get('user_id')
@@ -157,13 +157,29 @@ def update_favorites(request):
             action = data.get('action')
 
             user = User.objects.get(id=user_id)
-            if action == "add":
+
+            if action == 'add':
                 if product_id not in user.favorites:
                     user.favorites.append(product_id)
-            elif action == "remove":
+                    user.save()
+                    return JsonResponse({"message": "Ürün favorilere eklendi."}, status=200)
+                else:
+                    return JsonResponse({"message": "Bu ürün zaten favorilerde."}, status=200)
+
+            elif action == 'remove':
                 if product_id in user.favorites:
                     user.favorites.remove(product_id)
-            user.save()
-            return JsonResponse({"message": "Favori güncellendi."}, status=200)
+                    user.save()
+                    return JsonResponse({"message": "Ürün favorilerden çıkarıldı."}, status=200)
+                else:
+                    return JsonResponse({"message": "Ürün zaten favorilerde değil."}, status=200)
+
+            else:
+                return JsonResponse({"error": "Geçersiz işlem."}, status=400)
+
+        except User.DoesNotExist:
+            return JsonResponse({"error": "Kullanıcı bulunamadı."}, status=404)
         except Exception as e:
-            return JsonResponse({"error": str(e)}, status=400)
+            return JsonResponse({"error": str(e)}, status=500)
+    else:
+        return JsonResponse({"error": "Sadece POST isteklerine izin verilir."}, status=405)
