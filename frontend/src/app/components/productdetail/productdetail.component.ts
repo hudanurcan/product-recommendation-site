@@ -3,11 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
+import { ToastComponent } from '../toast/toast.component';
 
 @Component({
   selector: 'app-productdetail',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ToastComponent],
   templateUrl: './productdetail.component.html',
   styleUrl: './productdetail.component.css'
 })
@@ -18,6 +19,9 @@ export class ProductDetailComponent implements OnInit {
   productId: string | null = null;
   product: any;  // Ürün detaylarını tutacak değişken
   userId: string | null = null;
+  toastMessage: string = '';
+  toastVisible: boolean = false;
+
 
   constructor(private route: ActivatedRoute, private http: HttpClient) {}
 
@@ -63,9 +67,14 @@ export class ProductDetailComponent implements OnInit {
       response => {
         this.isFavorite = !this.isFavorite;
         console.log('Favori durumu güncellendi:', response);
+        const msg = this.isFavorite
+        ? 'Favorilere eklendi.'
+        : 'Favorilerden çıkarıldı.';
+        this.showToast(msg);
       },
       error => {
         console.error('Favori durumu güncellenemedi:', error);
+        this.showToast('Bir hata oluştu!');
       }
     );
   }
@@ -84,6 +93,13 @@ checkIfFavorite() {
     }
   );
 }
+showToast(message: string) {
+  this.toastMessage = message;
+  this.toastVisible = true;
 
+  setTimeout(() => {
+    this.toastVisible = false;
+  }, 3000); // 3 saniyede kaybolur
+}
   
 }
