@@ -3,7 +3,9 @@ from .models import User
 from django.views.decorators.csrf import csrf_exempt
 import json
 from werkzeug.security import generate_password_hash, check_password_hash
-from bson import ObjectId
+from bson import ObjectId, json_util
+from products.models import Product  
+
 
 @csrf_exempt
 def register(request):
@@ -106,6 +108,40 @@ def add_remove_favorite(request):
                 return JsonResponse({"message": "Ürün favorilerde değil"}, status=400)
         else:
             return JsonResponse({"error": "Geçersiz işlem türü"}, status=400)
+
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+    
+
+
+@csrf_exempt
+def get_favorites(request, user_id):
+    try:
+        # Kullanıcıyı veritabanından çekiyoruz
+        user = User.objects.get(id=user_id)
+
+        # Kullanıcı favorisindeki ürünleri almak
+        favorites = user.favorites  # Bu sadece ObjectId'leri içeriyor
+
+        # Favori ürünleri alalım
+        favorite_products = []
+        for fav_id in favorites:
+            product = Product.objects.get(id=fav_id)  # Product modelini doğru kullanın
+            favorite_products.append({
+                "product_id": str(product.id),
+                "product_name": product.name,  # İlgili ürün adı
+                "product_price": product.price,  
+                "product_image": product.images
+                
+            })
+
+        # Favorileri JSON formatında döndürüyoruz
+       # favorites_json = json_util.dumps(favorite_products, default=json_util.default)
+        print(f"Favoriler JSON verisi: {favorite_products}")  # Gelen favorileri burada yazdırın
+        return JsonResponse({'favorites': favorite_products}, safe=False, status=200)
+    
+    except User.DoesNotExist:
+        return JsonResponse({"error": "Kullanıcı bulunamadı."}, status=404)
 
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)

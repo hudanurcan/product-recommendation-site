@@ -1,46 +1,54 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { FavoriteService } from '../../services/favorite.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { isPlatformBrowser } from '@angular/common'; // isPlatformBrowser import edilmelidir
+
 @Component({
   selector: 'app-favorites',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './favorites.component.html',
   styleUrl: './favorites.component.css'
 })
 export class FavoritesComponent implements OnInit{
-favorites: any[] = []; // Favori ürünleri tutacak array
+  userId: string | null = null; // Kullanıcı ID'si
+  favorites: any[] = []; // Favori ürünler listesi
 
-  constructor(private favoriteService: FavoriteService, private route: ActivatedRoute, private http: HttpClient) { }
+  constructor(
+    private favoritesService: FavoriteService,
+    private route: ActivatedRoute,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
   ngOnInit(): void {
-    // Kullanıcı ID'sini almak için route parametrelerini kullanıyoruz
-    const userId = this.route.snapshot.paramMap.get('user_id');
-    if (userId) {
-      this.getFavorites(userId);  // Favorileri alacak fonksiyonu çağırıyoruz
+    if (isPlatformBrowser(this.platformId)) {
+      // Burada localStorage'a erişebilirsiniz
+      const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+      this.userId = currentUser.user_id;
+      console.log('User ID from localStorage:', this.userId); // Burada kullanıcı ID'sinin doğru alındığını kontrol edin.
+      if (this.userId) {
+        console.log('User ID is valid:', this.userId);
+        this.loadFavorites();
+      } else {
+        console.error('User ID not found in localStorage');
+      }
     }
   }
-
-  getFavorites(userId: string) {
-    // Backend'den favori ürünleri almak için HTTP isteği
-    this.http.get<any[]>(`http://localhost:8000/api/users/favorites/${userId}`).subscribe(
-      (data) => {
-        this.favorites = data;  // Favori ürünleri dizisine atıyoruz
-      },
-      (error) => {
-        console.error('Favoriler alınamadı', error);  // Hata durumunu konsola yazdırıyoruz
-      }
-    );
-  }
-
-  removeFavorite(productId: string): void {
-    // Favorilerden ürün çıkarma işlemi
-    const userId = 'kullanıcı_id';  // Burada kullanıcı id'sini almanız gerekir
-    this.favoriteService.removeFavorite(userId, productId).subscribe((response) => {
-      this.favorites = this.favorites.filter((fav) => fav.id !== productId);  // Favorilerden çıkarılan ürünü listeden kaldırıyoruz
-    });
-  }
   
+  loadFavorites(): void {
+    if (this.userId) {
+      this.favoritesService.getFavorites(this.userId).subscribe(
+        (response) => {
+          console.log('Favorites response:', response); // API'den gelen yanıtı kontrol et
+          this.favorites = response.favorites; // Gelen veriyi işleyin
+          console.log('Favorites:', this.favorites); // Favorileri konsola yazdırın
+          console.log('Received Favorites:', this.favorites);  // Resim verisinin burada olup olmadığını kontrol et
+        },
+        (error) => {
+          console.error('Favorites yüklenemedi:', error); // Hata varsa konsola yazdırın
+        }
+      );
+    }
+  }
 }

@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from products import views
 from products.views import elbise_products
+from users.views import get_favorites
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,6 +27,7 @@ urlpatterns = [
     #path('api/users/', include('users.urls')), # ?
     path('api/users/', include('users.urls')),  # Users uygulaması
     path('api/kadin/elbise/', elbise_products, name="elbise-products"),
+    path('api/users/favorites/<str:user_id>/', get_favorites, name='get_favorites'),
     
 ]
 
