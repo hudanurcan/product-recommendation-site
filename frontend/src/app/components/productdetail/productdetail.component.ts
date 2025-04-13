@@ -1,9 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ToastComponent } from '../toast/toast.component';
+import { PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+
 
 @Component({
   selector: 'app-productdetail',
@@ -23,10 +26,11 @@ export class ProductDetailComponent implements OnInit {
   toastVisible: boolean = false;
 
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) {}
+  constructor(private route: ActivatedRoute, private http: HttpClient,  @Inject(PLATFORM_ID) private platformId: Object) {}
 
   ngOnInit(): void {
     // URL'den ürün id'sini alıyoruz
+    if (isPlatformBrowser(this.platformId)) {
     this.productId = this.route.snapshot.paramMap.get('id');
     const currentUser = localStorage.getItem('currentUser');
     const user = currentUser ? JSON.parse(currentUser) : null;
@@ -45,6 +49,7 @@ export class ProductDetailComponent implements OnInit {
         }
       );
     }
+  }
   }
 
   // HTTP GET isteği: Ürün detaylarını backend'den alıyoruz
