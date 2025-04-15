@@ -28,6 +28,7 @@ urlpatterns = [
     path('api/users/', include('users.urls')),  # Users uygulaması
     path('api/kadin/elbise/', elbise_products, name="elbise-products"),
     path('api/users/favorites/<str:user_id>/', get_favorites, name='get_favorites'),
+    path('api/products/', include('products.urls')),
     
 ]
 

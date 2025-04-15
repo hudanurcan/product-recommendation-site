@@ -1,4 +1,17 @@
 from django.shortcuts import render
+from django.http import JsonResponse
+
+from django.http import JsonResponse
+from .models import Product, Elbise, Pantolon  # Tüm koleksiyon modellerini ekle
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from pymongo import MongoClient
+from .models import Product, Elbise
+from users.models import User
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+import json
+from .recommendation import build_recommendations  # 📌 İçeriğe dayalı 
 
 # Create your views here.
 from django.http import JsonResponse
@@ -61,10 +74,7 @@ def elbise_products(request):
     ]
     return JsonResponse(data, safe=False)
 
-from django.http import JsonResponse
 
-from django.http import JsonResponse
-from .models import Product, Elbise, Pantolon  # Tüm koleksiyon modellerini ekle
 
 def product_by_category(request, category):
     if category.lower() == 'elbise':  # Elbise kategorisi
@@ -84,4 +94,97 @@ def product_by_category(request, category):
         for product in products
     ]
     return JsonResponse(data, safe=False)
+
+# 🔹 MongoDB'deki tüm koleksiyonlardan ürünleri getir
+@csrf_exempt
+def tum_urunleri_getir(request):
+    client = MongoClient("mongodb+srv://bitirmeprojesi:hudairembanu246@bitirmeprojesi.1znfq.mongodb.net/")
+    db = client["bitirme_db"]
+    kategori_koleksiyonlari = [
+        "Kelsbiseler", "Epantolonlar", "Egomlek-tshirt",
+        "Ekazak-hirka", "Kdis-giyim", "Edis-giyim",
+        "Khirka-kazak", "Kgomlek-bluz", "Kpantolonlar"
+    ]
+
+    tum_urunler = []
+
+    for koleksiyon_adi in kategori_koleksiyonlari:
+        urunler = db[koleksiyon_adi].find({})
+        tum_urunler.extend([{
+            "id": str(urun["_id"]),
+            "name": urun.get("name"),
+            "price": urun.get("price", ""),
+            "images": urun.get("images", [])
+        } for urun in urunler])
+
+    return JsonResponse(tum_urunler, safe=False)
+
+# 🔹 Belirli kategoriye göre ürünleri getir
+def product_by_category(request, category):
+    if category.lower() == 'elbise':
+        products = Elbise.objects.all()
+    else:
+        products = Product.objects.filter(category=category)
+
+    data = [{
+        "id": str(product.id),
+        "name": product.name,
+        "price": product.price,
+        "images": product.images,
+    } for product in products]
+
+    return JsonResponse(data, safe=False)
+
+# 🔹 Görüntülenen ürünlere göre öneri (veri Product modelinden gelmeli)
+@csrf_exempt
+def recommend_based_on_viewed(request):
+    body = json.loads(request.body)
+    viewed_product_ids = body.get('viewed_products', [])
+
+    if not viewed_product_ids:
+        return JsonResponse({'error': 'Gezilen ürün IDleri gönderilmedi'}, status=400)
+
+    viewed_products = Product.objects(id__in=viewed_product_ids)
+    all_products = Product.objects()
+
+    def feature_vector(product):
+        try:
+            price_cleaned = str(product.price).replace(".", "").replace(",", ".").replace("TL", "").strip()
+            price = float(price_cleaned)
+        except:
+            price = 0.0
+        return np.array([price, len(product.images)])
+
+    viewed_vectors = np.array([feature_vector(p) for p in viewed_products])
+    all_vectors = np.array([feature_vector(p) for p in all_products])
+
+    similarities = cosine_similarity(viewed_vectors, all_vectors).mean(axis=0)
+
+    recommendations = sorted(
+        zip(all_products, similarities),
+        key=lambda x: x[1],
+        reverse=True
+    )
+
+    top_recommendations = [
+        {
+            'id': str(rec[0].id),
+            'name': rec[0].name,
+            'price': rec[0].price,
+            'images': rec[0].images,
+            'similarity': round(float(rec[1]), 3)
+        }
+        for rec in recommendations[:5]
+    ]
+
+    return JsonResponse(top_recommendations, safe=False)
+
+# 🔹 Katalog koleksiyonları için içerik tabanlı öneri
+@csrf_exempt
+def content_based_recommendation(request, email):
+    if request.method == "GET":
+        results = build_recommendations(email, top_k=5)
+        return JsonResponse({"recommendations": results}, safe=False)
+    return JsonResponse({"error": "Sadece GET destekleniyor."}, status=405)
+
 

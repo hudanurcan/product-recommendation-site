@@ -183,3 +183,33 @@ def favorites(request):
             return JsonResponse({"error": str(e)}, status=500)
     else:
         return JsonResponse({"error": "Sadece POST isteklerine izin verilir."}, status=405)
+
+
+@csrf_exempt
+def add_viewed_product(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        email = data.get("email")
+        product_id = data.get("product_id")
+
+        user = User.objects(email=email).first()
+        if user:
+            if product_id not in user.viewed_products:
+                user.viewed_products.append(product_id)
+                user.save()
+            return JsonResponse({"status": "Gezilen ürün eklendi"})
+        else:
+            return JsonResponse({"error": "Kullanıcı bulunamadı"}, status=404)
+    return JsonResponse({"error": "Yalnızca POST kabul edilir"}, status=405)
+
+def get_user_favorites(request, email):
+    user = User.objects(email=email).first()
+    if user:
+        return JsonResponse({"favorites": user.favorites})
+    return JsonResponse({"error": "Kullanıcı bulunamadı"}, status=404)
+
+def get_user_viewed_products(request, email):
+    user = User.objects(email=email).first()
+    if user:
+        return JsonResponse({"viewed_products": user.viewed_products})
+    return JsonResponse({"error": "Kullanıcı bulunamadı"}, status=404)
