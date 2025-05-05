@@ -14,6 +14,7 @@ import { isPlatformBrowser } from '@angular/common'; // isPlatformBrowser import
 export class FavoritesComponent implements OnInit{
   userId: string | null = null; // Kullanıcı ID'si
   favorites: any[] = []; // Favori ürünler listesi
+  recommendedProducts: any[] = []; // Önerilen ürünler
 
   constructor(
     private favoritesService: FavoriteService,
@@ -30,6 +31,8 @@ export class FavoritesComponent implements OnInit{
       if (this.userId) {
         console.log('User ID is valid:', this.userId);
         this.loadFavorites();
+        this.loadRecommendations(currentUser.email);  // Kullanıcının email adresi ile öneri yükleyin
+
       } else {
         console.error('User ID not found in localStorage');
       }
@@ -50,5 +53,16 @@ export class FavoritesComponent implements OnInit{
         }
       );
     }
+  }
+
+  loadRecommendations(email: string): void {
+    this.favoritesService.getRecommendations(email).subscribe(
+      (response) => {
+        this.recommendedProducts = response.recommendations;
+      },
+      (error) => {
+        console.error('Öneriler yüklenemedi:', error);
+      }
+    );
   }
 }

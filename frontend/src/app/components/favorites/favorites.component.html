@@ -1,7 +1,7 @@
+
 <div class="favorites-container">
     <h2>Favori Ürünler</h2>
-  
-    <!-- Favoriler listesi -->
+    
     <div *ngIf="favorites.length > 0; else noFavorites" class="favorites-grid">
       <div *ngFor="let favorite of favorites" class="favorite-item">
         <a [routerLink]="['/product', favorite.product_id]">
@@ -12,9 +12,23 @@
       </div>
     </div>
   
-    <!-- Favori bulunmazsa gösterilecek mesaj -->
+    <h2>İlginizi Çekebilecek Diğer Ürünler</h2>
+    <div *ngIf="recommendedProducts.length > 0; else noRecommendations" class="favorites-grid">
+      <div *ngFor="let recommended of recommendedProducts" class="favorite-item">
+        <a [routerLink]="['/product', recommended.id]">
+          <img [src]="recommended.product_image" alt="{{recommended.product_name}}" />
+          <p><strong>Ürün Adı:</strong> {{ recommended.product_name }}</p>
+          <p><strong>Fiyat:</strong> {{ recommended.product_price }}</p>
+        </a>
+      </div>
+    </div>
+    
     <ng-template #noFavorites>
       <p>Henüz favori ürününüz yok.</p>
+    </ng-template>
+  
+    <ng-template #noRecommendations>
+      <p>Önerilen ürünler bulunamadı.</p>
     </ng-template>
   </div>
   

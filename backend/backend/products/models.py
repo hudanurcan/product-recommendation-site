@@ -1,12 +1,4 @@
-# from django.db import models
 
-# class Product(models.Model):
-#     name = models.CharField(max_length=255, null=True, blank=True)  # NULL değerlerine izin ver
-#     price = models.CharField(max_length=100, null=True, blank=True)
-#     images = models.URLField(null=True, blank=True)
-
-#     def __str__(self):
-#         return self.name
 from mongoengine import Document, StringField, URLField, ListField
 
 class Product(Document):

@@ -1,4 +1,3 @@
-
 import pandas as pd
 import numpy as np
 from pymongo import MongoClient
@@ -8,9 +7,9 @@ from bson import ObjectId, errors as bson_errors
 import re
 
 # 🔗 MongoDB bağlantısı
-MONGO_URI = "mongodb+srv://bitirmeprojesi:hudairembanu246@bitirmeprojesi.1znfq.mongodb.net/"
+MONGO_URI = "mongodb+srv://clusterName:password@clusterName.1znfq.mongodb.net/?retryWrites=true&w=majority&appName=clusterName"
 client = MongoClient(MONGO_URI)
-db = client["bitirme_db"]
+db = client["vt"]
 
 # 🔹 Sadece "katalog" koleksiyonu kullanılacak
 collection = db["katalog"]
@@ -61,7 +60,6 @@ def build_recommendations(user_email, top_k=5):
     df_all = pd.DataFrame(all_products)
     df_user = pd.DataFrame(user_products)
 
-    # 🔐 Eksik 'category' gibi sütunlar varsa hata vermemesi için kontrol
     required_cols = [
         "name", "category", "color", "fabric_type", "pattern", "closure_type",
         "button_count", "collar_type", "sleeve_type", "cut", "lining", "filling",
@@ -73,14 +71,12 @@ def build_recommendations(user_email, top_k=5):
         if col not in df_user.columns:
             df_user[col] = ""
 
-    # 🔠 Özellikleri birleştir
     for df in [df_all, df_user]:
         df["combined_features"] = df.fillna("").apply(
             lambda row: " ".join([str(row.get(col, "")) for col in required_cols]),
             axis=1
         )
 
-    # 🎯 TF-IDF ve Kosinüs Benzerlik
     tfidf = TfidfVectorizer()
     tfidf_matrix_all = tfidf.fit_transform(df_all["combined_features"])
     tfidf_matrix_user = tfidf.transform(df_user["combined_features"])
@@ -88,10 +84,13 @@ def build_recommendations(user_email, top_k=5):
     similarity = cosine_similarity(tfidf_matrix_user, tfidf_matrix_all).mean(axis=0)
     df_all["similarity"] = similarity
 
-    top_results = df_all.sort_values(by="similarity", ascending=False).head(top_k)
+    # 💥 Kullanıcının sahip olduğu ürünleri öneriden çıkar
+    exclude_ids = df_user["_id"].astype(str).tolist()
+    df_filtered = df_all[~df_all["_id"].astype(str).isin(exclude_ids)]
 
-    # 🛠 ObjectId JSON'a çevrilemez -> string'e çevir
+    top_results = df_filtered.sort_values(by="similarity", ascending=False).head(top_k)
+
     results = top_results[["_id", "name", "category", "price", "images", "similarity"]].copy()
-    results["_id"] = results["_id"].apply(str)
+    results["_id"] = results["_id"].astype(str)
 
     return results.to_dict(orient="records")

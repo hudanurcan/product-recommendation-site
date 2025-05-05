@@ -27,23 +27,7 @@ def register(request):
             return JsonResponse({"error": str(e)}, status=400)
     return JsonResponse({"error": "Yalnızca POST istekleri kabul edilir!"}, status=405)
 
-# @csrf_exempt
-# def login(request):
-#     if request.method == "POST":
-#         try:
-#             data = json.loads(request.body)  # JSON verisini alır. Kullanıcıdan gelen email ve password bilgilerini JSON formatında alır.
-#             email = data['email']
-#             password = data['password']
 
-#             # Kullanıcıyı bul
-#             user = User.objects(email=email).first()
-#             if user and check_password_hash(user.password, password):
-#                 return JsonResponse({"message": "Giriş başarılı!"}, status=200)
-#             else:
-#                 return JsonResponse({"error": "Geçersiz email veya şifre!"}, status=401)
-#         except Exception as e:
-#             return JsonResponse({"error": str(e)}, status=400)
-#     return JsonResponse({"error": "Yalnızca POST istekleri kabul edilir!"}, status=405)
 @csrf_exempt
 def login(request):
     if request.method == "POST":

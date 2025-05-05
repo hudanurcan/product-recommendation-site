@@ -17,5 +17,6 @@ export const routes: Routes = [
     { path: 'product/:id', component: ProductDetailComponent },
     { path: 'home', component: HomepageComponent},
     { path: 'category/:category', component: CategoryComponent },
-    { path: "favorites", component: FavoritesComponent}
+    { path: "favorites", component: FavoritesComponent},
+    
 ];

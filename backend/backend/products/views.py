@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 
 from django.http import JsonResponse
-from .models import Product, Elbise, Pantolon  # Tüm koleksiyon modellerini ekle
+from .models import Product, Elbise, Pantolon  
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from pymongo import MongoClient
@@ -11,7 +11,7 @@ from users.models import User
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 import json
-from .recommendation import build_recommendations  # 📌 İçeriğe dayalı 
+from .recommendation import build_recommendations  
 
 # Create your views here.
 from django.http import JsonResponse
@@ -44,25 +44,9 @@ def product_detail(request, product_id):
     except Product.DoesNotExist:
         return JsonResponse({'error': 'Product not found'}, status=404)
     
-# def elbise_products(request):
-#     # MongoDB'deki "Product" koleksiyonuna erişim
-#     products = Product.objects(category="Kadın", subcategory="Elbise")  # Kategoriyi filtrele
-
-#     # Verileri JSON formatına dönüştür
-#     data = [
-#         {
-#             "id": str(product.id),  # MongoDB ObjectId'yi string'e çeviriyoruz
-#             "name": product.name,
-#             "price": product.price,
-#             "images": product.images,
-#         }
-#         for product in products
-#     ]
-
-#     return JsonResponse(data, safe=False) # liste döndürüldüğü için false
 
 def elbise_products(request):
-    products = Elbise.objects.all()  # Elbise koleksiyonunu kullanır
+    products = Elbise.objects.all() 
     data = [
         {
             "id": str(product.id),
@@ -95,11 +79,11 @@ def product_by_category(request, category):
     ]
     return JsonResponse(data, safe=False)
 
-# 🔹 MongoDB'deki tüm koleksiyonlardan ürünleri getir
+# MongoDB'deki tüm koleksiyonlardan ürünleri getir
 @csrf_exempt
 def tum_urunleri_getir(request):
-    client = MongoClient("mongodb+srv://bitirmeprojesi:hudairembanu246@bitirmeprojesi.1znfq.mongodb.net/")
-    db = client["bitirme_db"]
+    client = MongoClient("mongodb+srv://clusterName:password@clusterName.1znfq.mongodb.net/?retryWrites=true&w=majority&appName=clusterName")
+    db = client["vt"]
     kategori_koleksiyonlari = [
         "Kelsbiseler", "Epantolonlar", "Egomlek-tshirt",
         "Ekazak-hirka", "Kdis-giyim", "Edis-giyim",
@@ -119,7 +103,7 @@ def tum_urunleri_getir(request):
 
     return JsonResponse(tum_urunler, safe=False)
 
-# 🔹 Belirli kategoriye göre ürünleri getir
+# Belirli kategoriye göre ürünleri getir
 def product_by_category(request, category):
     if category.lower() == 'elbise':
         products = Elbise.objects.all()
@@ -135,7 +119,7 @@ def product_by_category(request, category):
 
     return JsonResponse(data, safe=False)
 
-# 🔹 Görüntülenen ürünlere göre öneri (veri Product modelinden gelmeli)
+#  Görüntülenen ürünlere göre öneri (veri Product modelinden gelmeli)
 @csrf_exempt
 def recommend_based_on_viewed(request):
     body = json.loads(request.body)
@@ -179,7 +163,7 @@ def recommend_based_on_viewed(request):
 
     return JsonResponse(top_recommendations, safe=False)
 
-# 🔹 Katalog koleksiyonları için içerik tabanlı öneri
+# Katalog koleksiyonları için içerik tabanlı öneri
 @csrf_exempt
 def content_based_recommendation(request, email):
     if request.method == "GET":
@@ -187,4 +171,28 @@ def content_based_recommendation(request, email):
         return JsonResponse({"recommendations": results}, safe=False)
     return JsonResponse({"error": "Sadece GET destekleniyor."}, status=405)
 
+@csrf_exempt
+def recommend_based_on_favorites(request, email):
+    if request.method == "GET":
+        # Kullanıcıya ait favorilere dayalı ürün önerisi al
+        recommendations = build_recommendations(email, top_k=5)
 
+        recommended_products = []
+        for product in recommendations:
+            # MongoDB'den ürünleri çek
+            catalog_product = Product.objects(id=product['_id']).first()
+
+            if catalog_product:
+                # Eğer ürün resim URL'si boşsa, varsayılan bir resim ekleyin
+                product_image = catalog_product.images[0] if catalog_product.images else "default_image_url"
+                
+                recommended_products.append({
+                    "id": str(catalog_product.id),  # MongoDB'nin id'sini string'e çevir
+                    "product_name": catalog_product.name,
+                    "product_price": catalog_product.price,
+                    "product_image": catalog_product.images  # İlk resim URL'si
+                })
+        
+        return JsonResponse({"recommendations": recommended_products}, safe=False)
+
+    return JsonResponse({"error": "Sadece GET destekleniyor."}, status=405)

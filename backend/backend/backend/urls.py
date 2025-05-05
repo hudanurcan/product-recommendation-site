@@ -24,11 +24,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('products.urls')),  # Products app'in URL'leri
     path('api/product/<str:product_id>/', views.product_detail, name='product_detail'),  # Burada <str:product_id> ID'yi alıyor
-    #path('api/users/', include('users.urls')), # ?
-    path('api/users/', include('users.urls')),  # Users uygulaması
+    path('api/users/', include('users.urls')),  
     path('api/kadin/elbise/', elbise_products, name="elbise-products"),
     path('api/users/favorites/<str:user_id>/', get_favorites, name='get_favorites'),
     path('api/products/', include('products.urls')),
-    
+    path('api/products/recommend/favorites/<str:email>/', views.recommend_based_on_favorites, name='recommend_based_on_favorites'),
+
 ]
 

@@ -48,10 +48,7 @@ export class TopbarComponent implements OnInit {
 
 
     ngOnInit() {
-      // if (isPlatformBrowser(this.platformId)) {
-      //   this.currentUser = this.authService.getUser();
-      //   console.log('Current User:', this.currentUser);
-      // }
+
       if (isPlatformBrowser(this.platformId)) {
         this.authService.getCurrentUserObservable().subscribe((user) => {
           this.currentUser = user;
@@ -60,7 +57,7 @@ export class TopbarComponent implements OnInit {
     }
 
   onSearch(event: any): void {
-    const value = event.target.value.toLowerCase(); // Arama terimini küçük harfe çeviriyoruz.
+    const value = event.target.value.toLowerCase(); // Arama terimini küçük harfe çevir.
     this.searchTerm = value;
 
     // Ürünleri filtrele
