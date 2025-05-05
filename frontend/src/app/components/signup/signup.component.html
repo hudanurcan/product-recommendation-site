@@ -1,0 +1,80 @@
+<div class="container">
+  <div class="left-side">
+    <div class="describe">
+      <h1> wARdrobe'a Hoş Geldiniz !</h1>
+      <p>
+        wARdrobe, kullanıcılarına kıyafetlerini deneme imkanı sunarak alışveriş
+        deneyimini geliştirmeyi hedefler. Yüksek kaliteli kıyafetlerimizle
+        tarzınızı keşfedin. Dijital dolabınızda, seçtiğiniz kıyafetleri
+        deneyebilir, farklı kombinler yaratabilir ve tarzınızı bir adım öteye
+        taşıyabilirsiniz. wARdrobe, sadece alışveriş değil, aynı zamanda bir
+        moda yolculuğudur. Haydi, gardırobunuzu yeniden keşfedin ve wARdrobe’un
+        ayrıcalıklı dünyasına adım atın. Kendinizi ifade etmek için artık
+        sınırsız olanaklara sahipsiniz!
+      </p>
+      <p> Siz de bize katılın !</p>
+    </div>
+
+    <div class="logo-container">
+      <div class="first">
+        <img src="stradivarius.png" alt="Logo" />
+        <img src="zara.png" alt="Logo" />
+      </div>
+
+      <div class="second">
+        <img src="pull.png" alt="Logo" />
+        <img src="mango.png" alt="Logo" />
+        <img src="bershka.png" alt="Logo" />
+      </div>
+    </div>
+  </div>
+
+  <div class="right-side">
+    <h1> Kişisel Bilgiler </h1>
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-container">
+        <input
+          
+          type="text"
+          placeholder="Ad"
+          [(ngModel)]="user.first_name"
+          name="first_name"
+          required
+        />
+        <input
+          
+          type="text"
+          placeholder="Soyad"
+          [(ngModel)]="user.last_name"
+          name="last_name"
+          required
+        />
+        <input
+          
+          type="email"
+          placeholder="E-Posta"
+          [(ngModel)]="user.email"
+          name="email"
+          required
+        />
+        <input
+          
+          type="password"
+          placeholder="Parola"
+          [(ngModel)]="user.password"
+          name="password"
+          required
+        />
+        <input
+          
+          type="text"
+          placeholder="(53...)"
+          [(ngModel)]="user.phone_number"
+          name="phone_number"
+          required
+        />
+        <button type="submit" class="button"> Hesap Oluştur</button>
+      </div>
+    </form>
+  </div>
+</div>

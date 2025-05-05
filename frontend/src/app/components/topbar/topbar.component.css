@@ -1,0 +1,222 @@
+.container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 98%;
+    height: 70px;
+    background-color: #fff; 
+    border-bottom: 1px solid #ddd; 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px; 
+    z-index: 1000; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 15px; 
+  }
+  
+  .logo img {
+    height: 50px; 
+    width: auto;
+  }
+  
+  .logo span {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333; 
+  }
+
+  .logo a{
+    text-decoration-line: none;
+    color: #333;
+    font-weight: bolder;
+    font-size: 22px;
+    cursor: pointer;
+  }
+  
+  .category {
+    display: flex;
+    gap: 15px; 
+    margin-left: 4%;
+    position: relative; 
+
+  }
+  
+  .category a {
+    font-size: 20px;
+    font-weight: 500;
+    color: #867360; 
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 5px; 
+    transition: all 0.3s ease; 
+    font-weight: bolder;
+
+  }
+  
+  .category a:hover {
+    background-color: #f0f0f0; 
+    color: #43392f; 
+    text-decoration-line: underline;
+    cursor: pointer;
+  }
+
+
+.dropdown {
+  position: absolute;
+  top: 100%; 
+  left: 0;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 5px; 
+  padding: 10px 0; 
+  display: none; 
+  z-index: 1000;
+  min-width: 150px; 
+}
+
+.dropdown ul {
+  list-style-type: none; 
+  margin: 0;
+  padding: 0;
+}
+
+.dropdown ul li {
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.dropdown ul li a {
+  text-decoration: none;
+  color: #867360;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  display: block; 
+}
+
+.dropdown ul li a:hover {
+  background-color: #f0f0f0;
+  color: #43392f;
+}
+
+.category:hover .dropdown {
+  display: block;
+}
+
+  
+ 
+  .search-bar {
+    position: relative; 
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .search-bar input {
+    width: 60%; 
+    height: 15%; 
+    padding: 5px 10px; 
+    border: 1px solid #ddd; 
+    border-radius: 5px; 
+    outline: none;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+  }
+  
+  .search-bar input:focus {
+    border-color: #5a5a5a; 
+  }
+  
+ 
+  .login a {
+    font-size: 16px;
+    color: white;
+    background-color: #B6A28E;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  .login a:hover {
+    background-color: #5c4d3e;
+    cursor: pointer;
+  }
+  
+  .search-icon {
+    position: absolute;
+    right: 20%; 
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #aaa;
+    pointer-events: none;
+  }
+  .login {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .user-name {
+    font-weight: 600;
+    color: #5c4d3e;
+    font-size: 15px;
+    padding: 8px 10px;
+    border-radius: 5px;
+    background-color: #f4eee9;
+    border: 1px solid #ccc;
+  }
+  
+  .logout-btn {
+    font-size: 14px;
+    padding: 8px 12px;
+    background-color: #b66;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .logout-btn:hover {
+    background-color: #933;
+  }
+  
+  .login-btn {
+    font-size: 16px;
+    color: white;
+    background-color: #B6A28E;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  .login-btn:hover {
+    background-color: #5c4d3e;
+  }
+  
+  .fav-btn {
+    margin-right: 5px;
+    padding: 8px 10px;
+    text-decoration: none;
+    color: #5c4d3e;
+    background-color: #f8f3f0;
+    border: 1px solid #c9b8a7;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  
+  .fav-btn:hover {
+    background-color: #e7dbd2;
+    color: #a0522d;
+  }
+  
