@@ -22,15 +22,15 @@ It is not a real shopping website — there is no actual payment or checkout sys
 
 
 ![Ekran Görüntüsü (2554)](https://github.com/user-attachments/assets/b418343d-3f8c-4324-a17c-0eb7c09bf7e2)
-
+***
 ![Ekran Görüntüsü (2555)](https://github.com/user-attachments/assets/55684698-4891-489b-8694-b222f90182a3)
-
+***
 ![Ekran Görüntüsü (2555)](https://github.com/user-attachments/assets/e854d1be-5e91-4169-8169-1a1e1fe50d5f)
-
+***
 ![Ekran Görüntüsü (2557)](https://github.com/user-attachments/assets/a6b6a7b6-72b9-4661-918f-b009f96eb386)
-
+***
 ![Ekran Görüntüsü (2558)](https://github.com/user-attachments/assets/8df2fe30-853a-47d3-a7c1-4498aafa0fbe)
-
+***
 ![Ekran Görüntüsü (2559)](https://github.com/user-attachments/assets/bf92d4cf-769b-4462-a8bb-f4d65d58595f)
 
 
