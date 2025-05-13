@@ -1,4 +1,4 @@
-# 🛍️ Product Recommendation Platform
+# 🛍Product Recommendation Platform
 
 This project is a product display and recommendation platform developed using **Django**, **Angular**, and **MongoDB**. 
 It is not a real shopping website — there is no actual payment or checkout system. This project was created as part of my graduation thesis.
@@ -21,11 +21,17 @@ It is not a real shopping website — there is no actual payment or checkout sys
 
 
 
-![Ekran Görüntüsü (2555)](https://github.com/user-attachments/assets/87724ce5-7197-46e8-8339-bf84000994b0)
-![Ekran Görüntüsü (2556)](https://github.com/user-attachments/assets/ef94cd71-4027-4132-8de6-bdde38badd48)
-![Ekran Görüntüsü (2557)](https://github.com/user-attachments/assets/1fcdb8e6-c0e6-4fca-bdbd-88c0fae6f50d)
-![Ekran Görüntüsü (2558)](https://github.com/user-attachments/assets/cba07b71-3fdd-4de8-b882-650a97c87706)
-![Ekran Görüntüsü (2559)](https://github.com/user-attachments/assets/ef519f0b-d801-40cb-a7f9-874e936a34df)
-![Ekran Görüntüsü (2554)](https://github.com/user-attachments/assets/71b48329-947e-4eed-a5bb-8b156b49683b)
+![Ekran Görüntüsü (2554)](https://github.com/user-attachments/assets/b418343d-3f8c-4324-a17c-0eb7c09bf7e2)
+![Ekran Görüntüsü (2555)](https://github.com/user-attachments/assets/55684698-4891-489b-8694-b222f90182a3)
+![Ekran Görüntüsü (2555)](https://github.com/user-attachments/assets/e854d1be-5e91-4169-8169-1a1e1fe50d5f)
+![Ekran Görüntüsü (2557)](https://github.com/user-attachments/assets/a6b6a7b6-72b9-4661-918f-b009f96eb386)
+![Ekran Görüntüsü (2558)](https://github.com/user-attachments/assets/8df2fe30-853a-47d3-a7c1-4498aafa0fbe)
+![Ekran Görüntüsü (2559)](https://github.com/user-attachments/assets/bf92d4cf-769b-4462-a8bb-f4d65d58595f)
+
+
+
+
+
+
 
 
